@@ -27,7 +27,7 @@ def construct_W_state(circ: QuantumCircuit, q: list):
         circ.cx(q[n - i - 2], q[n - i - 1])
     
     
-def xy_mixer_initial_state(n_nodes: int, n_colors: int, suppress: bool=True):
+def xy_mixer_initial_state(n_nodes: int, n_colors: int, suppress: bool=False):
     """W state setup within a single node"""
     
     if suppress:
@@ -47,7 +47,7 @@ def xy_mixer_initial_state(n_nodes: int, n_colors: int, suppress: bool=True):
     return initial_state
 
         
-def xy_mixer(n_nodes: int, n_colors: int, suppress: bool=True):
+def xy_mixer(n_nodes: int, n_colors: int, suppress: bool=False):
     """XY mixing operator setup"""
     
     if suppress:

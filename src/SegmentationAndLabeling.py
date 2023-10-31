@@ -168,7 +168,7 @@ class SegmentationAndLabeling:
         if options is None:
             # network visualization options
             options = {
-                "font_size": 12,
+                "font_size": 8,
                 "node_size": 2000,
                 "node_color": "white",
                 "edgecolors": "black",
@@ -204,12 +204,29 @@ class SegmentationAndLabeling:
 
         node_labels = None
         if draw_node_labels:
-            node_labels = nx.get_node_attributes(self.G, "label")
+            # node_labels = nx.get_node_attributes(self.G, "label")
+            node_labels = dict()
+            for d in range(self.num_nodes):
+                s = f"{d}\n"
+                for c in range(self.num_labels):
+                    s += f"{c}:{self.A[d, c]:.1f}\n"
+                node_labels[d] = s
+            
         nx.draw_networkx(self.G, self.pos, labels=node_labels, ax=ax, **options)
         if draw_edge_labels:
-            edge_labels = nx.get_edge_attributes(self.G, "weight")
+            # edge_labels = nx.get_edge_attributes(self.G, "weight")
+            edge_labels = dict()
+            for d in range(self.num_nodes):
+                for d1 in range(d + 1, self.num_nodes):
+                    w = ""
+                    for c in range(self.num_labels):
+                        for c1 in range(self.num_labels):
+                            w += f" {self.B[d, d1, c, c1]:.1f}"
+                    # self.G.add_edge(d, d1, weight=w)
+                    edge_labels[(d, d1)] = w
+            
             nx.draw_networkx_edge_labels(
-                self.G, pos=self.pos, edge_labels=edge_labels, label_pos=label_pos, **options
+                self.G, pos=self.pos, edge_labels=edge_labels, label_pos=label_pos, font_size=options['font_size'],
             )
 
     def draw_solution(self, ax, x: np.ndarray, node_size=200, width=2, alpha=0.8) -> None:
